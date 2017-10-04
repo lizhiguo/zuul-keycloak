@@ -1,0 +1,30 @@
+spring:
+  main:
+    banner_mode: 'off'
+
+server:
+  port: 8888
+
+zuul:
+  routes:
+    sample:
+      path: /sample/**
+      url: http://localhost:8080/app
+
+
+
+#keycloak:
+#  realm: ds
+#  auth-server-url: http://localhost:8180/auth
+#  ssl-required: external
+#  resource: service-user
+#  public-client: false
+#  credentials:
+#    secret: '123456'
+#  securityConstraints:
+#    - authRoles:
+#      - user
+#    - securityCollections:
+#        - name : protected
+#        - patterns:
+#            - '/*'
