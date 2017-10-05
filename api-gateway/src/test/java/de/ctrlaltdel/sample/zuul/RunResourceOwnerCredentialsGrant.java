@@ -3,6 +3,8 @@ package de.ctrlaltdel.sample.zuul;
 import com.jayway.restassured.response.ExtractableResponse;
 import com.jayway.restassured.response.Response;
 
+import java.util.Properties;
+
 import static com.jayway.restassured.RestAssured.given;
 
 /**
@@ -10,14 +12,27 @@ import static com.jayway.restassured.RestAssured.given;
  */
 public class RunResourceOwnerCredentialsGrant {
 
-    private static final String TOKEN_ENDPOINT = "http://keycloak1:8080/auth/realms/ds/protocol/openid-connect/token";
+    private static String tokenEndpoint;
 
     public static void main(String[] args) {
+
         try {
+            Properties appProps = new Properties();
+            appProps.load(RunResourceOwnerCredentialsGrant.class.getResourceAsStream("/application.properties"));
+
+            tokenEndpoint = String.format("%s/realms/%s/protocol/openid-connect/token",
+                    appProps.getProperty("keycloak.auth-server-url"),
+                    appProps.getProperty("keycloak.realm"));
+
+            System.out.printf("Token-Endpoint: %s%n", tokenEndpoint);
+
             String bearer = runLogin();
-            for (String path : new String[] { "user", "master"}) {
-                access(bearer, path);
-            }
+//            for (String path : new String[] { "user", "master"}) {
+//                access(bearer, path);
+//            }
+
+            logout(bearer);
+            access(bearer, "user");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -31,7 +46,7 @@ public class RunResourceOwnerCredentialsGrant {
                 .formParam("grant_type", "password")
                 .formParam("username", "test1")
                 .formParam("password", "123456")
-                .post(TOKEN_ENDPOINT)
+                .post(tokenEndpoint)
                 .then()
                 .log().headers()
                 .statusCode(200)
@@ -45,7 +60,24 @@ public class RunResourceOwnerCredentialsGrant {
         String url = "http://localhost:8888/sample/" + path;
         System.out.printf("%nGet with bearer: %s%n", url);
 
-        int expectedStatus = "user".equals(path) ? 200 : 403;
+        ExtractableResponse<Response> response = given()
+                .when()
+                .redirects().follow(false)
+                .header("Authorization", bearer)
+                .get(url)
+                .then()
+                .log().headers()
+                .extract();
+
+        System.out.printf("Status: %d%n", response.statusCode());
+        System.out.println(response.body().asString());
+    }
+
+    private static void logout(String bearer) {
+
+        String url = "http://localhost:8888/logout";
+        System.out.printf("%nGet with bearer: %s%n", url);
+
 
         ExtractableResponse<Response> response = given()
                 .when()
@@ -54,9 +86,10 @@ public class RunResourceOwnerCredentialsGrant {
                 .get(url)
                 .then()
                 .log().headers()
-                .statusCode(expectedStatus)
+                .statusCode(204)
                 .extract();
 
+        System.out.printf("Status: %d%n", response.statusCode());
         System.out.println(response.body().asString());
     }
 

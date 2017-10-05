@@ -49,12 +49,14 @@ public abstract class KeycloakFilter extends ZuulFilter {
         return false;
     }
 
-
-
     protected String extractBearer() {
+        return String.format("Bearer %s", extractToken());
+    }
+
+    protected String extractToken() {
         RequestContext context = RequestContext.getCurrentContext();
         Principal principal = context.getRequest().getUserPrincipal();
-        return principal instanceof KeycloakPrincipal ? String.format("Bearer %s", ((KeycloakPrincipal) principal).getKeycloakSecurityContext().getTokenString())
-                                                      : "";
+        return principal instanceof KeycloakPrincipal ? ((KeycloakPrincipal) principal).getKeycloakSecurityContext().getTokenString() : "";
+
     }
 }

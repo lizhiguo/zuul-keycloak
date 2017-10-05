@@ -3,24 +3,21 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>de.ctrlaltdel.sample</groupId>
+    <parent>
+        <groupId>de.ctrlaltdel.sample</groupId>
+        <artifactId>zuul-keycloak</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
     <artifactId>service-app</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.build.resourceEncoding>UTF-8</project.build.resourceEncoding>
-        <maven.compiler.version>1.8</maven.compiler.version>
-        <spring-boot.version>1.5.4.RELEASE</spring-boot.version>
-        <keycloak.version>3.3.0.CR2</keycloak.version>
-    </properties>
 
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
-            <version>${spring-boot.version}</version>
             <exclusions>
                 <exclusion>
                     <groupId>com.fasterxml.jackson.core</groupId>
@@ -32,13 +29,11 @@
         <dependency>
             <groupId>org.keycloak</groupId>
             <artifactId>keycloak-spring-boot-starter</artifactId>
-            <version>${keycloak.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.keycloak</groupId>
             <artifactId>keycloak-core</artifactId>
-            <version>${keycloak.version}</version>
         </dependency>
 
         <dependency>
@@ -51,20 +46,10 @@
     <build>
         <plugins>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.5.1</version>
-                <configuration>
-                    <source>${maven.compiler.version}</source>
-                    <target>${maven.compiler.version}</target>
-                </configuration>
-            </plugin>
-            <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <version>${spring-boot.version}</version>
             </plugin>
-
         </plugins>
     </build>
 
