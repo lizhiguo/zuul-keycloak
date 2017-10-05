@@ -1,4 +1,4 @@
-package de.ctrlaltdel.sample.zuul;
+package de.ctrlaltdel.sample.gateway;
 
 import com.jayway.restassured.response.ExtractableResponse;
 import com.jayway.restassured.response.Response;
@@ -8,54 +8,27 @@ import java.util.Properties;
 import static com.jayway.restassured.RestAssured.given;
 
 /**
- * RunResourceOwnerCredentialsGrant
+ * SampleBase
  */
-public class RunResourceOwnerCredentialsGrant {
+public class SampleBase {
 
-    private static String tokenEndpoint;
+    static final String SAMPLE_URL = "http://localhost:8888/sample/user";
 
-    public static void main(String[] args) {
-
+    public static String resolveTokenEndpoint() {
         try {
             Properties appProps = new Properties();
             appProps.load(RunResourceOwnerCredentialsGrant.class.getResourceAsStream("/application.properties"));
 
-            tokenEndpoint = String.format("%s/realms/%s/protocol/openid-connect/token",
+            return String.format("%s/realms/%s/protocol/openid-connect/token",
                     appProps.getProperty("keycloak.auth-server-url"),
                     appProps.getProperty("keycloak.realm"));
 
-            System.out.printf("Token-Endpoint: %s%n", tokenEndpoint);
-
-            String bearer = runLogin();
-//            for (String path : new String[] { "user", "master"}) {
-//                access(bearer, path);
-//            }
-
-            logout(bearer);
-            access(bearer, "user");
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new IllegalStateException(e);
         }
     }
 
-    private static String runLogin() {
-
-        return "Bearer "  + given()
-                .auth().preemptive().basic("service-user", "123456")
-                .redirects().follow(false)
-                .formParam("grant_type", "password")
-                .formParam("username", "test1")
-                .formParam("password", "123456")
-                .post(tokenEndpoint)
-                .then()
-                .log().headers()
-                .statusCode(200)
-                .extract()
-                .path("access_token")
-                ;
-    }
-
-    private static void access(String bearer, String path) {
+    public void access(String bearer, String path) {
 
         String url = "http://localhost:8888/sample/" + path;
         System.out.printf("%nGet with bearer: %s%n", url);
@@ -73,7 +46,7 @@ public class RunResourceOwnerCredentialsGrant {
         System.out.println(response.body().asString());
     }
 
-    private static void logout(String bearer) {
+    public void logout(String bearer) {
 
         String url = "http://localhost:8888/logout";
         System.out.printf("%nGet with bearer: %s%n", url);

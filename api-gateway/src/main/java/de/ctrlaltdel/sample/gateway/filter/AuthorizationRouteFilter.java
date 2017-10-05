@@ -1,4 +1,4 @@
-package de.ctrlaltdel.sample.zuul.filter;
+package de.ctrlaltdel.sample.gateway.filter;
 
 import com.netflix.zuul.context.RequestContext;
 import org.slf4j.Logger;

@@ -1,4 +1,4 @@
-package de.ctrlaltdel.sample.zuul;
+package de.ctrlaltdel.sample.gateway;
 
 import com.jayway.restassured.response.ExtractableResponse;
 import com.jayway.restassured.response.Response;
@@ -16,24 +16,21 @@ import static org.junit.Assert.assertTrue;
 /**
  * RunServiceCheck
  */
-public class RunAuthorizationCodeFlow {
+public class RunAuthorizationCodeFlow extends SampleBase {
 
-    private static final String SAMPLE_URL = "http://localhost:8888/sample/user";
-
-    private static final String APP_URL = "http://localhost:8080/app/user";
 
     public static void main(String[] args) {
+        RunAuthorizationCodeFlow app = new RunAuthorizationCodeFlow();
         try {
-            String bearer = login();
-            access(bearer);
-            accessDirect(bearer);
+            String bearer = app.login();
+            app.access(bearer, "user");
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
 
-    private static String login() throws Exception {
+    private String login() throws Exception {
 
         ExtractableResponse<Response> response = given()
                 .redirects().follow(false)
@@ -120,40 +117,6 @@ public class RunAuthorizationCodeFlow {
         System.out.println(response.body().asString());
 
         return bearer;
-    }
-
-    private static void access(String bearer) {
-
-        System.out.printf("%nGet with bearer: %s%n", SAMPLE_URL);
-
-        ExtractableResponse<Response> response = given()
-                .when()
-                .redirects().follow(false)
-                .header("Authorization", bearer)
-                .get(SAMPLE_URL)
-                .then()
-                .log().headers()
-                .statusCode(200)
-                .extract();
-
-        System.out.println(response.body().asString());
-    }
-
-    private static void accessDirect(String bearer) {
-        System.out.printf("%nGet direct with bearer: %s%n", APP_URL);
-
-        ExtractableResponse<Response> response = given()
-                .when()
-                .redirects().follow(false)
-                .header("Authorization", bearer)
-                .get(APP_URL)
-                .then()
-                .log().headers()
-                .statusCode(200)
-                .extract();
-
-        System.out.println(response.body().asString());
-
     }
 
 }

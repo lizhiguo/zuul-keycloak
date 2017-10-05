@@ -1,7 +1,7 @@
-package de.ctrlaltdel.sample.zuul;
+package de.ctrlaltdel.sample.gateway;
 
-import de.ctrlaltdel.sample.zuul.filter.AuthorizationRouteFilter;
-import de.ctrlaltdel.sample.zuul.filter.BearerPreFilter;
+import de.ctrlaltdel.sample.gateway.filter.AuthorizationRouteFilter;
+import de.ctrlaltdel.sample.gateway.filter.BearerPreFilter;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
