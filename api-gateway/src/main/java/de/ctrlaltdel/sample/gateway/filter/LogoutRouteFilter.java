@@ -23,6 +23,7 @@ public class LogoutRouteFilter extends KeycloakFilter {
 
     private static final Logger LOG = LoggerFactory.getLogger(LogoutRouteFilter.class);
 
+    // TODO use shared cache ..
     private static final Map<String, Instant> INVALID_KEYS = new HashMap<>();
 
     @Override

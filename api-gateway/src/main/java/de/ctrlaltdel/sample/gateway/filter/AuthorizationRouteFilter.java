@@ -1,17 +1,13 @@
 package de.ctrlaltdel.sample.gateway.filter;
 
 import com.netflix.zuul.context.RequestContext;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Component;
 
 /**
  * AuthorizationRouteFilter
  */
-@Controller
+@Component
 public class AuthorizationRouteFilter extends KeycloakFilter {
-
-    private static final Logger LOG = LoggerFactory.getLogger(AuthorizationRouteFilter.class);
 
     @Override
     protected boolean isRouteFilter() {

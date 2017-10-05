@@ -4,6 +4,7 @@ import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
 import org.keycloak.KeycloakPrincipal;
 
+import javax.servlet.http.HttpServletResponse;
 import java.security.Principal;
 
 /**
@@ -58,5 +59,9 @@ public abstract class KeycloakFilter extends ZuulFilter {
         Principal principal = context.getRequest().getUserPrincipal();
         return principal instanceof KeycloakPrincipal ? ((KeycloakPrincipal) principal).getKeycloakSecurityContext().getTokenString() : "";
 
+    }
+
+    protected HttpServletResponse getResponse() {
+        return RequestContext.getCurrentContext().getResponse();
     }
 }
