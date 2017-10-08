@@ -1,4 +1,6 @@
 spring:
+  application:
+    name: API-GATEWAY
   main:
     banner_mode: 'off'
 
@@ -9,9 +11,28 @@ zuul:
   routes:
     sample:
       path: /sample/**
-      url: http://localhost:8080/app
+      url: http://localhost:8080/secure
+      roles: user,master
     logout:
       path: /logout
       url: http://nowhere
+      roles: user,master
+    open:
+      path: /open/**
+      url: http://localhost:8080/open
+
+keycloak:
+  auth-server-url: http://keycloak1:8080/auth
+  public-client: false
+  realm: api-gateway
+  resource: service-user
+  ssl-required: external
+  credentials:
+      secret: '123456'
+
+logging:
+  level.org.keycloak: DEBUG
+  level.org.apache.catalina.authenticator: DEBUG
+  level.de.ctrlaltdel: DEBUG
 
 

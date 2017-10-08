@@ -1,0 +1,36 @@
+
+spring:
+  application:
+    name: SAMPLE
+  main:
+    banner_mode: 'off'
+
+server:
+    port: 8080
+
+keycloak:
+  auth-server-url: http://keycloak1:8080/auth
+  credentials:
+    secret: '123456'
+  public-client: false
+  realm: api-gateway
+  resource: service-user
+  ssl-required: external
+  securityConstraints:
+  - authRoles:
+    - user
+    securityCollections:
+    - name: user-roles
+      patterns:
+      - /secure/user
+  - authRoles:
+    - master
+    securityCollections:
+    - name: master-roles
+      patterns:
+      - /secure/master
+
+logging:
+  level.org.keycloak: DEBUG
+  level.org.apache.catalina.authenticator: DEBUG
+  level.de.ctrlaltdel: DEBUG

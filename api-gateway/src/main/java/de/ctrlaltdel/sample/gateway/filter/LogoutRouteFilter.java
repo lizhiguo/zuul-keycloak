@@ -12,8 +12,8 @@ import javax.servlet.http.HttpServletRequest;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.time.Instant;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * LogoutRouteFilter
@@ -24,7 +24,7 @@ public class LogoutRouteFilter extends KeycloakFilter {
     private static final Logger LOG = LoggerFactory.getLogger(LogoutRouteFilter.class);
 
     // TODO use shared cache ..
-    private static final Map<String, Instant> INVALID_KEYS = new HashMap<>();
+    private static final Map<String, Instant> INVALID_KEYS = new ConcurrentHashMap<>();
 
     @Override
     protected boolean isRouteFilter() {
@@ -83,7 +83,7 @@ public class LogoutRouteFilter extends KeycloakFilter {
         }
     }
 
-    @Scheduled(fixedDelay = 30000)
+    @Scheduled(fixedDelay = 60000)
     public void housekeeping() {
         Instant now = Instant.now();
         INVALID_KEYS.forEach((key, time) -> {

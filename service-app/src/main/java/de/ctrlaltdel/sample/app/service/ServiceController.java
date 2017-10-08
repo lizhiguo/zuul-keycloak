@@ -28,7 +28,7 @@ public class ServiceController {
         objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
     }
 
-    @RequestMapping(path = "user", produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(path = "secure/user", produces = MediaType.APPLICATION_JSON_VALUE)
     public String user(Principal principal, HttpServletResponse response, HttpServletRequest request) throws Exception {
         if (principal instanceof KeycloakPrincipal) {
             AccessToken accessToken = ((KeycloakPrincipal) principal).getKeycloakSecurityContext().getToken();
@@ -39,9 +39,16 @@ public class ServiceController {
     }
 
 
-    @RequestMapping(path = "master", produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(path = "secure/master", produces = MediaType.APPLICATION_JSON_VALUE)
     public String master(Principal principal, HttpServletResponse response, HttpServletRequest request) {
         boolean hasPermission = request.isUserInRole("master");
         return String.format("{\"principal\":\"%s\", \"permission\":\"%b\" }", principal == null ? "null" : principal.getName(), hasPermission);
-    };
+    }
+
+    @RequestMapping(path = "open", produces = MediaType.APPLICATION_JSON_VALUE)
+    public String unsecure() {
+        return "{\"unsecure\":\"success\" }";
+    }
+
+
 }

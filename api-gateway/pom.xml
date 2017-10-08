@@ -38,6 +38,12 @@
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>com.netflix.netflix-commons</groupId>
+            <artifactId>netflix-commons-util</artifactId>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -49,5 +55,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>

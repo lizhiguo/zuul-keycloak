@@ -21,7 +21,7 @@ public abstract class KeycloakFilter extends ZuulFilter {
 
     @Override
     public boolean shouldFilter() {
-        return true;
+        return isSecureRequest();
     }
 
     @Override
@@ -63,5 +63,9 @@ public abstract class KeycloakFilter extends ZuulFilter {
 
     protected HttpServletResponse getResponse() {
         return RequestContext.getCurrentContext().getResponse();
+    }
+
+    protected boolean isSecureRequest() {
+        return RequestContext.getCurrentContext().getRequest().getUserPrincipal() instanceof KeycloakPrincipal;
     }
 }

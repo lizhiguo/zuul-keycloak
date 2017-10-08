@@ -16,7 +16,7 @@ public class BearerPostFilter extends KeycloakFilter {
 
     @Override
     public boolean shouldFilter() {
-        return !getResponse().containsHeader(AUTHORIZATION);
+        return super.shouldFilter() && !getResponse().containsHeader(AUTHORIZATION);
     }
 
     @Override
