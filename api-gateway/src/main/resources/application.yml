@@ -28,7 +28,7 @@ keycloak:
   resource: service-user
   ssl-required: external
   credentials:
-      secret: '123456'
+    secret: '123456'
 
 logging:
   level.org.keycloak: DEBUG
