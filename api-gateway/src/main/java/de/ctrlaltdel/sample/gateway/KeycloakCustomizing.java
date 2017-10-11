@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.embedded.EmbeddedServletContainerCustomizer;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -25,6 +26,7 @@ import java.util.Map;
 @Configuration
 @EnableConfigurationProperties(KeycloakCustomizing.ExtendedZuulProperties.class)
 @AutoConfigureBefore(KeycloakAutoConfiguration.class)
+@ConditionalOnProperty(value = "keycloak.enabled", matchIfMissing = true)
 public class KeycloakCustomizing {
 
     private static final Logger LOG = LoggerFactory.getLogger(KeycloakCustomizing.class);

@@ -22,6 +22,7 @@ zuul:
       url: http://localhost:8080/open
 
 keycloak:
+  enabled: false  # to prevent auto configure
   auth-server-url: http://keycloak1:8080/auth
   public-client: false
   realm: api-gateway

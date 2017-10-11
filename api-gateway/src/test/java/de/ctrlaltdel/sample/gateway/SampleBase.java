@@ -3,8 +3,6 @@ package de.ctrlaltdel.sample.gateway;
 import com.jayway.restassured.response.ExtractableResponse;
 import com.jayway.restassured.response.Response;
 
-import java.util.Properties;
-
 import static com.jayway.restassured.RestAssured.given;
 
 /**
@@ -15,17 +13,9 @@ public class SampleBase {
     static final String SAMPLE_URL = "http://localhost:8888/sample/user";
 
     public static String resolveTokenEndpoint() {
-        try {
-            Properties appProps = new Properties();
-            appProps.load(RunResourceOwnerCredentialsGrant.class.getResourceAsStream("/application.properties"));
-
-            return String.format("%s/realms/%s/protocol/openid-connect/token",
-                    appProps.getProperty("keycloak.auth-server-url"),
-                    appProps.getProperty("keycloak.realm"));
-
-        } catch (Exception e) {
-            throw new IllegalStateException(e);
-        }
+        return String.format("%s/realms/%s/protocol/openid-connect/token",
+                "http://keycloak1:8080/auth",
+                "api-gateway");
     }
 
     public void access(String bearer, String path) {

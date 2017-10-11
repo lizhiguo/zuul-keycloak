@@ -55,10 +55,8 @@ public abstract class KeycloakFilter extends ZuulFilter {
     }
 
     protected String extractToken() {
-        RequestContext context = RequestContext.getCurrentContext();
-        Principal principal = context.getRequest().getUserPrincipal();
+        Principal principal = getUserPrincipal();
         return principal instanceof KeycloakPrincipal ? ((KeycloakPrincipal) principal).getKeycloakSecurityContext().getTokenString() : "";
-
     }
 
     protected HttpServletResponse getResponse() {
@@ -66,6 +64,12 @@ public abstract class KeycloakFilter extends ZuulFilter {
     }
 
     protected boolean isSecureRequest() {
-        return RequestContext.getCurrentContext().getRequest().getUserPrincipal() instanceof KeycloakPrincipal;
+        return getUserPrincipal() instanceof KeycloakPrincipal;
+    }
+
+    protected Principal getUserPrincipal() {
+        RequestContext context = RequestContext.getCurrentContext();
+        Principal principal = context.getRequest().getUserPrincipal();
+        return principal != null ? principal : (Principal) context.get(Principal.class.getName());
     }
 }
